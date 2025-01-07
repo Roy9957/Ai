@@ -5,7 +5,6 @@ const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, get, child } = require('firebase/database');
 
 const app = express();
-const port = 3000;
 
 // Middleware
 app.use(cors());
@@ -71,7 +70,10 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+// Start the server (Note: Vercel uses serverless, so this is not needed)
+// app.listen(port, () => {
+//   console.log(`Server is running at http://localhost:${port}`);
+// });
+
+// Export the app as a function for Vercel
+module.exports = app;
