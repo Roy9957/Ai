@@ -15,7 +15,7 @@
     "firebase": "^10.5.0",
     "natural": "^5.3.1"
   },
-  "keywords": ["chatbot", "firebase", "natural"],
-  "author": "Roy",
+  "keywords": ["chatbot", "firebase", "natural", "nodejs", "AI"],
+  "author": "Ronobir Roy",
   "license": "MIT"
 }
