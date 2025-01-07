@@ -1,7 +1,7 @@
 {
   "name": "chatbot-server",
   "version": "1.0.0",
-  "description": "A chatbot server.",
+  "description": "A chatbot server using Firebase and Natural.js",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -13,7 +13,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firebase": "^10.5.0",
-    "natural": "^5.3.1"
+    "natural": "^0.6.3"
   },
   "keywords": ["chatbot", "firebase", "natural", "nodejs", "AI"],
   "author": "Ronobir Roy",
