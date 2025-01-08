@@ -43,7 +43,7 @@ app.post('/chat', async (req, res) => {
       let bestMatch = { question: "", answer: "", score: 0 };
 
       // Compare user input with each question in the database
-      data.forEach((qa) => {
+      Object.values(data).forEach((qa) => {
         const tokenizedQuestion = tokenizer.tokenize(qa.question.toLowerCase());
         const tokenizedInput = tokenizer.tokenize(userMessage.toLowerCase());
 
@@ -70,10 +70,5 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-// Start the server (Note: Vercel uses serverless, so this is not needed)
-// app.listen(port, () => {
-//   console.log(`Server is running at http://localhost:${port}`);
-// });
-
-// Export the app as a function for Vercel
+// Export the app for Vercel
 module.exports = app;
