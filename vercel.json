@@ -8,8 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/chat",
-      "methods": ["POST"],
+      "src": "/api/(.*)",
       "dest": "/index.js"
     }
   ]
