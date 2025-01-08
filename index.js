@@ -1,12 +1,14 @@
+// Import necessary modules
 const express = require('express');
 const cors = require('cors');
 const natural = require('natural');
 const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, get, child } = require('firebase/database');
 
+// Initialize Express app
 const app = express();
 
-// Middleware
+// Middleware to parse JSON and enable CORS
 app.use(cors());
 app.use(express.json());
 
@@ -21,11 +23,11 @@ const firebaseConfig = {
   appId: "1:183611137008:web:8d56d2f4c8aba8b6ae5b35"
 };
 
-// Initialize Firebase
+// Initialize Firebase app
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
-// Chat endpoint
+// Chat endpoint to handle user messages
 app.post('/api/chat', async (req, res) => {
   const userMessage = req.body.message;
 
@@ -36,27 +38,27 @@ app.post('/api/chat', async (req, res) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
 
-      // Tokenizer for text comparison
+      // Tokenizer to break text into words for comparison
       const tokenizer = new natural.WordTokenizer();
       const similarityThreshold = 0.7;
 
       let bestMatch = { question: "", answer: "", score: 0 };
 
-      // Compare user input with each question in the database
+      // Compare each question in the database with the user's message
       for (const key in data) {
         const qa = data[key];
         const tokenizedQuestion = tokenizer.tokenize(qa.question.toLowerCase());
         const tokenizedInput = tokenizer.tokenize(userMessage.toLowerCase());
 
-        // Calculate Jaccard similarity
-        const similarity = natural.JaccardDistance(tokenizedQuestion, tokenizedInput);
+        // Calculate Jaccard similarity manually
+        const similarity = calculateJaccardSimilarity(tokenizedQuestion, tokenizedInput);
 
         if (similarity > bestMatch.score && similarity > similarityThreshold) {
           bestMatch = { question: qa.question, answer: qa.answer, score: similarity };
         }
       }
 
-      // Return best match or fallback answer
+      // Return the best match answer or a fallback message
       if (bestMatch.answer) {
         res.json({ answer: bestMatch.answer });
       } else {
@@ -71,7 +73,14 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Run on port 5000
+// Function to calculate Jaccard Similarity
+function calculateJaccardSimilarity(a, b) {
+  const intersection = a.filter(value => b.includes(value)).length;
+  const union = new Set([...a, ...b]).size;
+  return intersection / union;
+}
+
+// Start server on port 5000
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
