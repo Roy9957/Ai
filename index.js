@@ -25,8 +25,8 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
-// POST endpoint for chatbot
-app.post('/chat', async (req, res) => {
+// Chat endpoint
+app.post('/api/chat', async (req, res) => {
   const userMessage = req.body.message;
 
   try {
@@ -43,7 +43,8 @@ app.post('/chat', async (req, res) => {
       let bestMatch = { question: "", answer: "", score: 0 };
 
       // Compare user input with each question in the database
-      Object.values(data).forEach((qa) => {
+      for (const key in data) {
+        const qa = data[key];
         const tokenizedQuestion = tokenizer.tokenize(qa.question.toLowerCase());
         const tokenizedInput = tokenizer.tokenize(userMessage.toLowerCase());
 
@@ -53,7 +54,7 @@ app.post('/chat', async (req, res) => {
         if (similarity > bestMatch.score && similarity > similarityThreshold) {
           bestMatch = { question: qa.question, answer: qa.answer, score: similarity };
         }
-      });
+      }
 
       // Return best match or fallback answer
       if (bestMatch.answer) {
@@ -70,5 +71,5 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-// Export the app for Vercel
+// Export the app as a serverless function for Vercel
 module.exports = app;
