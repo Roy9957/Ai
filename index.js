@@ -71,5 +71,8 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Export the app as a serverless function for Vercel
-module.exports = app;
+// Run on port 5000
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
